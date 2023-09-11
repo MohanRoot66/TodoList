@@ -55,6 +55,8 @@ function addItemToDOM(item) {
   li.appendChild(document.createTextNode(item));
 
   const button = createButton('remove-item btn-link text-red');
+
+
   li.appendChild(button);
 
   // Add li to the DOM
@@ -65,7 +67,10 @@ function createButton(classes) {
   const button = document.createElement('button');
   button.className = classes;
   const icon = createIcon('fa-solid fa-xmark');
+  const icon2 = createIcon("fa-solid fa-check");
+  
   button.appendChild(icon);
+  button.appendChild(icon2);
   return button;
 }
 
@@ -99,11 +104,25 @@ function getItemsFromStorage() {
 
 function onClickItem(e) {
   if (e.target.parentElement.classList.contains('remove-item')) {
-    removeItem(e.target.parentElement.parentElement);
+    // Check if the clicked element has the classes "fa-solid" and "fa-xmark"
+    if (e.target.classList.contains("fa-solid") && e.target.classList.contains("fa-xmark")) {
+      // Show a confirmation dialog and proceed with removal if confirmed
+      removeItem(e.target.parentElement.parentElement);
+    } else {
+      let listitem = e.target.parentElement.parentElement;
+   
+      if (listitem.style.textDecoration === "line-through") {
+        listitem.style.textDecoration = "none"; // Remove line-through
+      } else {
+        listitem.style.textDecoration = "line-through"; // Add line-through
+      }
+    }
+    
   } else {
     setItemToEdit(e.target);
   }
 }
+
 
 function checkIfItemExists(item) {
   const itemsFromStorage = getItemsFromStorage();
